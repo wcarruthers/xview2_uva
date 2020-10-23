@@ -1,0 +1,84 @@
+
+cd ~/xview/xView2_baseline
+conda create --name xview python=3.7
+(base) bash-4.2$conda activate xview
+(xview) bash-4.2$cd ~/xview/xView2_baseline
+(xview) bash-4.2$conda install --file requirements.txt
+
+PackagesNotFoundError: The following packages are not available from current channels:
+
+  - imantics
+  - imgaug
+  - opencv-python
+  - tensorboardx
+  - simplification
+  
+pip install above packages...
+conda install pandas --not sure why i did it
+conda install tqdm
+
+
+mkdir -p "$inference_base"
+--mkdir /tmp/inference/
+
+label_temp="$inference_base"/"${input_image%.*}"/labels
+
+
+mkdir -p "$label_temp"
+--mkdir/tmp/inference/mexico/labels
+
+cd "$XBDIR"/spacenet/inference/
+
+cd spacenet/inference/
+
+python3 ./inference.py --input "$input" --weights "$localization_weights" --mean "$XBDIR"/weights/mean.npy --output "$label_temp"/"${input_image%.*}".json >> "$LOGFILE" 2>&1
+--input ~/xview/xView2_baseline/test/mexico-earthquake_00000004_pre_disaster.png
+--weights ~/xview/xView2_baseline/weights/localization.h5 
+--mean ~/xview/xView2_baseline/weights/mean.npy
+--ouput ~/xview/xView2_baseline/tmp/inference/mexico/labels/mexico.json
+
+--this worked creating mask polygons from input image. outpyt is a json file
+(xview) -bash-4.2$python ./inference.py --input ~/xview/xView2_baseline/test/mexico-earthquake_00000004_p
+re_disaster.png --weights ~/xview/xView2_baseline/weights/localization.h5 --mean ~/xview/xView2_baseline/
+weights/mean.npy --output ~/xview/xView2_baseline/tmp/inference/MEXICO/labels/mexico.json
+--
+cd ~/xview/xView2_baseline
+
+mkdir -p "$inference_base"/output_polygons
+mkdir /tmp/inference/output_polygons
+had to cd tmp cd inference mkdir output_polygons
+
+cd into model
+
+ ./process_data_inference.py --input_img ~/xview/xView2_baseline/test/mexico-eart
+hquake_00000004_post_disaster.png --label_path ~/xview/xView2_baseline/tmp/inference/MEXICO/labels/mexico
+.json --output_dir ~/xview/xView2_baseline/tmp/inference/output_polygons --output_csv ~/xview/xView2_base
+line/tmp/inference/output.csv
+
+./damage_inference.py --test_data "$inference_base"/output_polygons --test_csv "$inference_base"/output.csv --model_weights "$classification_weights" --output_json /tmp/inference/classification_inference.json >> "$LOGFILE" 2>&1
+./damage_inference.py --test_data /tmp/inference/output_polygons --test_csv /tmp/inference/output.csv --model_weights ~/xview/xView2_baseline/weights/localization.h5  --output_json /tmp/inference/classification_inference.json
+
+./damage_inference.py --test_data ~/xview/xView2_baseline/tmp/inference/output_p
+olygons --test_csv ~/xview/xView2_baseline/tmp/inference/output.csv --model_weights ~/xview/xView2_baseli
+ne/weights/classification.hdf5  --output_json ~/tmp/inference/classification_inference.json
+
+python ./damage_inference.py --test_data ~/xview/xView2_baseline/tmp/inference/output_polygons --test_csv ~/xview/xView2_baseline/tmp/inference/output.csv --model_weights ~/xview/xView2_baseline/weights/classification.hdf5  --output_json ~/xview/xView2_baseline/tmp/inference/classification_inference.json
+
+(xview) -bash-4.2$python ~/xview/xView2_baseline/utils/combine_jsons.py --polys ~/xview/xView2_baseline/t
+mp/inference/MEXICO/labels/mexico.json --classes ~/xview/xView2_baseline/tmp/inference/classification_inf
+erence.json --output ~/xview/xView2_baseline/tmp/inference/inference.json
+
+(xview) -bash-4.2$python ~/xview/xView2_baseline/utils/inference_image_output.py --input ~/xview/xView2_b
+aseline/tmp/inference/inference.json --output ~/xview/xView2_baseline/test/pred/output.png
+
+~/xview/xView2_baseline/tmp/inference/inference.json
+--localization
+~/xview/xView2_baseline/test/pred/output.png
+--output
+~/xview/xView2_baseline/test/pred/overlay_output.png
+--damage
+~/xview/xView2_baseline/test/pred/output.png
+--image
+~/xview/xView2_baseline/test/mexico-earthquake_00000004_post_disaster.png
+
+--localization ~/xview/xView2_baseline/test/pred/output.png --output ~/xview/xView2_baseline/test/pred/overlay_output.png --damage ~/xview/xView2_baseline/test/pred/output.png --image ~/xview/xView2_baseline/test/mexico-earthquake_00000004_post_disaster.png
