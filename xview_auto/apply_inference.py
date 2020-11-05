@@ -1,3 +1,5 @@
+#library(reticulate)
+#use_condaenv("DisasterSat2", required = TRUE)
 
 import sys
 import pandas as pd
