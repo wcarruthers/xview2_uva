@@ -1,17 +1,23 @@
 
 import sys
 import pandas as pd
+import os #Added in order to make paths relative
+import cv2
 # this program is going to automate everything..
 
+# this program is going to automate everything..
+#os.getcwd()
+os.chdir('/Users/fire/Desktop/GIT_Repos/xview2_uva/xview_auto')
+
 #GLOBAL VARIABLES
-WEIGHT_LOC_PTH = '/home/wfc4qe/xview/xview_auto/xview2/weights/localization.h5'
-MEAN_PTH = '/home/wfc4qe/xview/xview_auto/xview2/weights/mean.npy'
-WEIGHT_DAM_PTH = '/home/wfc4qe/xview/xview_auto/xview2/weights/classification.hdf5'
+WEIGHT_LOC_PTH = '/Users/fire/Desktop/GIT_Repos/xview2_uva/xview_auto/xview2/weights/localization.h5'
+MEAN_PTH = '/Users/fire/Desktop/GIT_Repos/xview2_uva/xview_auto/xview2/weights/mean.npy'
+WEIGHT_DAM_PTH = '/Users/fire/Desktop/GIT_Repos/xview2_uva/xview_auto/xview2/weights/classification.hdf5'
 
-PRE_IMAGE = '/home/wfc4qe/xview/xview_auto/xview2/test/mexico-earthquake_00000004_pre_disaster.png'
-POST_IMAGE = '/home/wfc4qe/xview/xview_auto/xview2/test/mexico-earthquake_00000004_post_disaster.png'
+PRE_IMAGE = '/Users/fire/Desktop/GIT_Repos/xview2_uva/xview_auto/xview2/test/mexico-earthquake_00000004_pre_disaster.png'
+POST_IMAGE = '/Users/fire/Desktop/GIT_Repos/xview2_uva/xview_auto/xview2/test/mexico-earthquake_00000004_post_disaster.png'
 
-POST_WITH_DAMAGE_CLASS_MASK = '/home/wfc4qe/xview/xview_auto/xview2/test/mexico-earthquake_00000004_prediction.png'
+POST_WITH_DAMAGE_CLASS_MASK = '/Users/fire/Desktop/GIT_Repos/xview2_uva/xview_auto/xview2/test/mexico-earthquake_00000004_prediction.png'
 
 #input
 ##pre_image
