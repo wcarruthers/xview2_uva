@@ -16,6 +16,7 @@ WEIGHT_LOC_PTH = '/Users/fire/Desktop/GIT_Repos/xview2_uva/xview_auto/xview2/wei
 MEAN_PTH = '/Users/fire/Desktop/GIT_Repos/xview2_uva/xview_auto/xview2/weights/mean.npy'
 WEIGHT_DAM_PTH = '/Users/fire/Desktop/GIT_Repos/xview2_uva/xview_auto/xview2/weights/classification.hdf5'
 
+#I think if we add some paste os. arguments here automation will be rather simple
 PRE_IMAGE = '/Users/fire/Desktop/GIT_Repos/xview2_uva/xview_auto/xview2/test/mexico-earthquake_00000004_pre_disaster.png'
 POST_IMAGE = '/Users/fire/Desktop/GIT_Repos/xview2_uva/xview_auto/xview2/test/mexico-earthquake_00000004_post_disaster.png'
 
