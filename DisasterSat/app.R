@@ -42,7 +42,7 @@ ui <- shinyUI(
         dashboardBody(
             shinyDashboardThemes(theme = "purple_gradient"),
             titlePanel(h1("Infrastructure Analysis",
-                          align = "center",
+                          #align = "center",
                           style="font-family: 'Lobster',
                                  cursive;
                                  font-size: 16;
