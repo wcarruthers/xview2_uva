@@ -24,6 +24,7 @@ ui <- shinyUI(
                 menuItem("Dataset Information",icon = icon("paper-plane"), href = "https://openaccess.thecvf.com/content_CVPRW_2019/papers/cv4gc/Gupta_Creating_xBD_A_Dataset_for_Assessing_Building_Damage_from_Satellite_CVPRW_2019_paper.pdf"),
                 menuItem("xView2 Algorithm", icon = icon("github"), href = "https://github.com/DIUx-xView/xView2_baseline"),
                 menuItem("Save the Children",icon = icon("hospital"), href = "https://www.savethechildren.org/"),
+                
                 #file input for Befor Image
                 fileInput(inputId = 'BeforeFile',
                           label ="Please upload your before image",
@@ -62,14 +63,13 @@ ui <- shinyUI(
 ############################ Server Details ################################
 server <- shinyServer(function(input,output,session) {
     
-    #setwd("~/Desktop/GIT_Repos/xview2_uva/xview_auto/xview2/test/") #This will need to be replaced with a relative path to test/
-
     ##### Handle storage and use of the Before Satellite png file
     observeEvent(input$BeforeFile, {
         inFile <- input$BeforeFile
         if (is.null(inFile))
             return()
-        file.copy(inFile$datapath, file.path("~/Desktop/GIT_Repos/xview2_uva/xview_auto/xview2/test/", inFile$name)) #This needs to be relative and overwrite
+        #file.copy(inFile$datapath, file.path("~/Desktop/GIT_Repos/xview2_uva/xview_auto/xview2/test/", inFile$name)) #This needs to be relative and overwrite
+        file.copy(inFile$datapath, file.path("xview_auto/xview2/test/", inFile$name))
     })
     
     ##### Handle storage and use of the After Satellite png file
@@ -77,7 +77,7 @@ server <- shinyServer(function(input,output,session) {
         inFile2 <- input$AfterFile
         if (is.null(inFile2))
             return()
-        file.copy(inFile2$datapath, file.path("~/Desktop/GIT_Repos/xview2_uva/xview_auto/xview2/test/", inFile2$name)) #This needs to be relative and overwrite
+        file.copy(inFile2$datapath, file.path("xview_auto/xview2/test/", inFile2$name)) #This needs to be relative and overwrite
     })
     
     
@@ -86,7 +86,8 @@ server <- shinyServer(function(input,output,session) {
         req(input$BeforeFile)
         req(input$AfterFile)
         
-        source_python("~/Desktop/GIT_Repos/xview2_uva/xview_auto/apply_inference.py")
+        #source_python("~/Desktop/GIT_Repos/xview2_uva/xview_auto/apply_inference.py")
+        source_python("xview_auto/apply_inference.py")
     })
     
     #### Image Output 
@@ -97,8 +98,8 @@ server <- shinyServer(function(input,output,session) {
         req(input$AfterFile)
         req(input$PythonButton)
         
-        PredictionFile=list.files(path = '~/Desktop/GIT_Repos/xview2_uva/xview_auto/xview2/test/',pattern='prediction.*\\.png')
-        outfile <- file.path(paste('~/Desktop/GIT_Repos/xview2_uva/xview_auto/xview2/test/', PredictionFile,sep = "")) #input$BeforeFile$datapath
+        PredictionFile=list.files(path = 'xview_auto/xview2/test/',pattern='prediction.*\\.png')
+        outfile <- file.path(paste('xview_auto/xview2/test/', PredictionFile,sep = "")) #input$BeforeFile$datapath
         contentType <- '.png'
         list(src = outfile,
              contentType=contentType,
@@ -108,11 +109,11 @@ server <- shinyServer(function(input,output,session) {
     
 # Thu Nov  5 12:24:48 2020 ----------------------------- Ask Will's opinion.
     #DataTable output
-        #This will display items such as percent of damage, long, lat, etc
-    # output$TableResults<- renderDataTable(mtcars,
-    #                                       options = list(
-    #                                           pageLength = 5)
-    # )
+    #This will display items such as percent of damage, long, lat, etc
+    output$TableResults<- renderDataTable(input$BeforeFile,
+                                          options = list(
+                                              pageLength = 5)
+    )
     
     
 })
