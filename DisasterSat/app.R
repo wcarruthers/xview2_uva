@@ -15,7 +15,7 @@ library(shinycssloaders)
 #use_condaenv("DisasterSat2", required = TRUE)
 
 # ### Define any Python packages needed for the app here:
-PYTHON_DEPENDENCIES = c("pip==19.0.3", #Added to fix Warning: Error in : invalid version specification ‘20.3b1’
+PYTHON_DEPENDENCIES = c("pip==20.2.4", #Added to fix Warning: Error in : invalid version specification ‘20.3b1’
                         "absl-py==0.11.0",
                         "astor==0.8.1",
                         "cached-property==1.5.2",
