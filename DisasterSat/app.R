@@ -25,6 +25,13 @@ ui <- shinyUI(
                 menuItem("xView2 Algorithm", icon = icon("github"), href = "https://github.com/DIUx-xView/xView2_baseline"),
                 menuItem("Save the Children",icon = icon("hospital"), href = "https://www.savethechildren.org/"),
                 
+                #Selector for Preloaded or custom
+                selectInput(inputId = "customselector",
+                            label = "User or Pre-Loaded Images?",
+                            choices = c(Custom = "Custom", PreLoaded = "Pre-Loaded")),
+                
+                conditionalPanel(condition = "input.customselector == 'Custom'",
+
                 #file input for Befor Image
                 fileInput(inputId = 'BeforeFile',
                           label ="Please upload your before image",
@@ -39,7 +46,10 @@ ui <- shinyUI(
                 
                 #Action button to run Python script.
                 actionButton("PythonButton", "Analyze")
+                
+                )#Ends Conditional panel argument
             )),
+        
         dashboardBody(
             shinyDashboardThemes(theme = "purple_gradient"),
             titlePanel(h1("Infrastructure Analysis",
@@ -56,8 +66,8 @@ ui <- shinyUI(
                         column(width = 12,height=100,align="center",offset = 12), 
                                #div(imageOutput("outputImage", height = "100%"), align = "center")),
                                #height=100,align="center",offset = 5), 
-                        div(withSpinner(imageOutput('outputImage')),align="center"),
-                        #DT::dataTableOutput("TableResults", width = "100%", height = "100%")
+                        div(withSpinner(imageOutput('outputImage')),align="left"),
+                        DT::dataTableOutput("TableResults", width = "100%", height = "100%"),
                         div(imageOutput('outputBeforeImage'),align="right"),
                         div(imageOutput('outputAfterImage'),align="right")
                         
@@ -66,13 +76,15 @@ ui <- shinyUI(
             )))
 ############################ Server Details ################################
 server <- shinyServer(function(input,output,session) {
+
+    
+######################################### Handle Data Inputs ################################################   
     
     ##### Handle storage and use of the Before Satellite png file
     observeEvent(input$BeforeFile, {
         inFile <- input$BeforeFile
         if (is.null(inFile))
             return()
-        #file.copy(inFile$datapath, file.path("~/Desktop/GIT_Repos/xview2_uva/xview_auto/xview2/test/", inFile$name)) #This needs to be relative and overwrite
         file.copy(inFile$datapath, file.path("xview_auto/xview2/test/", inFile$name))
     })
     
@@ -84,19 +96,25 @@ server <- shinyServer(function(input,output,session) {
         file.copy(inFile2$datapath, file.path("xview_auto/xview2/test/", inFile2$name)) #This needs to be relative and overwrite
     })
     
+######################################### Python Script execution  ################################################   
     
     #### Action button to run Python Script
     observeEvent(input$PythonButton,{
         req(input$BeforeFile)
         req(input$AfterFile)
         
-        #source_python("~/Desktop/GIT_Repos/xview2_uva/xview_auto/apply_inference.py")
+        #Calls the Xview Python script
         source_python("xview_auto/apply_inference.py")
     })
+    
+    
+######################################### Image Ouput Section ################################################   
     
     #### Image Output 
         #This will display the image created from apply_inference.py
     output$outputImage <- renderImage({
+        
+        if(input$customselector== "Custom") {
         #Requirements before predict image will be displayed
         req(input$BeforeFile)
         req(input$AfterFile)
@@ -105,26 +123,68 @@ server <- shinyServer(function(input,output,session) {
         PredictionFile=list.files(path = 'xview_auto/xview2/test/',pattern='prediction.*\\.png')
         outfile <- file.path(paste('xview_auto/xview2/test/', PredictionFile,sep = "")) #input$BeforeFile$datapath
         contentType <- '.png'
+        
         list(src = outfile,
              contentType=contentType,
              width = 800,
              height=800)
-    }, deleteFile = FALSE)
+    #}, deleteFile = FALSE) 
+    } else {
+        list(src = 'xview_auto/xview2/test/PreLoad_prediction.png',
+             contentType='.png',
+             width = 800,
+             height=800)
+    }
+    
+}, deleteFile = FALSE) 
     
     #### Image Output for Before Image
     output$outputBeforeImage = renderImage({
+        if(input$customselector== "Custom") {
+        #Requirements before Before Image will be displayed
         req(input$BeforeFile)
         
-        BeforeFile=list.files(path = 'xview_auto/xview2/test/',pattern='pre.*\\.png')
-        outfile2 <- file.path(paste('xview_auto/xview2/test/', BeforeFile,sep = "")) #input$BeforeFile$datapath
+        #BeforeFile=list.files(path = 'xview_auto/xview2/test/',pattern='pre_.*\\.png')
+        #outfile2 <- file.path(paste('xview_auto/xview2/test/', BeforeFile,sep = "")) 
+        outfile2 <- file.path("xview_auto/xview2/test/", input$BeforeFile$name)
         contentType <- '.png'
+        
         list(src = outfile2,
              contentType=contentType,
-             width = 800,
-             height=800)
+             width = 200,
+             height=200)
+    #}, deleteFile = FALSE)
+        } else {
+            list(src = 'xview_auto/xview2/test/PreLoad_Before_Image.png',
+                 contentType='.png',
+                 width = 200,
+                 height=200) 
+        }
     }, deleteFile = FALSE)
-
-    #})
+    
+    #### Image Output for After Image
+    output$outputAfterImage = renderImage({
+        if(input$customselector== "Custom") {
+            #Requirements before After Image will be displayed
+        req(input$AfterFile)
+        
+        #BeforeFile=list.files(path = 'xview_auto/xview2/test/',pattern='pre_.*\\.png')
+        #outfile2 <- file.path(paste('xview_auto/xview2/test/', BeforeFile,sep = "")) 
+        outfile3 <- file.path("xview_auto/xview2/test/", input$AfterFile$name)
+        contentType <- '.png'
+        
+        list(src = outfile3,
+             contentType=contentType,
+             width = 200,
+             height=200)
+    #}, deleteFile = FALSE)
+        } else {
+            list(src = 'xview_auto/xview2/test/PreLoad_After_Image.png',
+                 contentType='.png',
+                 width = 200,
+                 height=200) 
+        }
+    }, deleteFile = FALSE)
     
 # Thu Nov  5 12:24:48 2020 ----------------------------- Ask Will's opinion.
     #DataTable output
