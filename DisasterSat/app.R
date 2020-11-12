@@ -57,7 +57,11 @@ ui <- shinyUI(
                                #div(imageOutput("outputImage", height = "100%"), align = "center")),
                                #height=100,align="center",offset = 5), 
                         div(withSpinner(imageOutput('outputImage')),align="center"),
-                        DT::dataTableOutput("TableResults", width = "100%", height = "100%")))
+                        #DT::dataTableOutput("TableResults", width = "100%", height = "100%")
+                        div(imageOutput('outputBeforeImage'),align="right"),
+                        div(imageOutput('outputAfterImage'),align="right")
+                        
+                        ))
                 
             )))
 ############################ Server Details ################################
@@ -107,13 +111,28 @@ server <- shinyServer(function(input,output,session) {
              height=800)
     }, deleteFile = FALSE)
     
+    #### Image Output for Before Image
+    output$outputBeforeImage = renderImage({
+        req(input$BeforeFile)
+        
+        BeforeFile=list.files(path = 'xview_auto/xview2/test/',pattern='pre.*\\.png')
+        outfile2 <- file.path(paste('xview_auto/xview2/test/', BeforeFile,sep = "")) #input$BeforeFile$datapath
+        contentType <- '.png'
+        list(src = outfile2,
+             contentType=contentType,
+             width = 800,
+             height=800)
+    }, deleteFile = FALSE)
+
+    #})
+    
 # Thu Nov  5 12:24:48 2020 ----------------------------- Ask Will's opinion.
     #DataTable output
     #This will display items such as percent of damage, long, lat, etc
-    output$TableResults<- renderDataTable(input$BeforeFile,
-                                          options = list(
-                                              pageLength = 5)
-    )
+    # output$TableResults<- renderDataTable(input$BeforeFile,
+    #                                       options = list(
+    #                                           pageLength = 5)
+    # )
     
     
 })
