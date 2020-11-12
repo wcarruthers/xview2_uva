@@ -99,7 +99,8 @@ server <- shinyServer(function(input,output,session) {
         inFile <- input$BeforeFile
         if (is.null(inFile))
             return()
-        file.copy(inFile$datapath, file.path("xview_auto/xview2/test/", inFile$name))
+        # file.copy(inFile$datapath, file.path("xview_auto/xview2/test/", inFile$name),overwrite = T) #Need to figure out overwrite
+        file.copy(inFile$datapath, file.path("xview_auto/xview2/test/", "Before_Image_File.png"),overwrite = T) #Need to figure out overwrite
     })
     
     ##### Handle storage and use of the After Satellite png file
@@ -107,7 +108,8 @@ server <- shinyServer(function(input,output,session) {
         inFile2 <- input$AfterFile
         if (is.null(inFile2))
             return()
-        file.copy(inFile2$datapath, file.path("xview_auto/xview2/test/", inFile2$name)) #This needs to be relative and overwrite
+        #file.copy(inFile2$datapath, file.path("xview_auto/xview2/test/", inFile2$name)) #Need to figure out overwrite
+        file.copy(inFile2$datapath, file.path("xview_auto/xview2/test/", "After_Image_File.png"),overwrite = T) #Need to figure out overwrite
     })
     
 ######################################### Python Script execution  ################################################   
@@ -134,19 +136,16 @@ server <- shinyServer(function(input,output,session) {
         req(input$AfterFile)
         req(input$PythonButton)
         
-        PredictionFile=list.files(path = 'xview_auto/xview2/test/',pattern='prediction.*\\.png')
-        outfile <- file.path(paste('xview_auto/xview2/test/', PredictionFile,sep = "")) #input$BeforeFile$datapath
-        contentType <- '.png'
-        
-        list(src = outfile,
-             contentType=contentType,
+        # So when the Python script runs it will always produce this file name so it is okay to code this way 
+        list(src = 'xview_auto/xview2/test/mexico-earthquake_00000004_prediction.png',
+             contentType='.png',
              width = 580,
              height= 580)
-        {
+
         #No clue why this doesn't work but should make it dynamic
         #width = session$clientData$output_outputImage_width,
         #height=session$clientData$output_outputImage_height)
-        }
+
     #}, deleteFile = FALSE) 
     } else {
         list(src = 'xview_auto/xview2/test/PreLoad_prediction.png',
@@ -165,7 +164,8 @@ server <- shinyServer(function(input,output,session) {
         
         #BeforeFile=list.files(path = 'xview_auto/xview2/test/',pattern='pre_.*\\.png')
         #outfile2 <- file.path(paste('xview_auto/xview2/test/', BeforeFile,sep = "")) 
-        outfile2 <- file.path("xview_auto/xview2/test/", input$BeforeFile$name)
+        # outfile2 <- file.path("xview_auto/xview2/test/", input$BeforeFile$name)
+        outfile2 <- file.path("xview_auto/xview2/test/", "Before_Image_File.png")
         contentType <- '.png'
         
         list(src = outfile2,
@@ -189,7 +189,8 @@ server <- shinyServer(function(input,output,session) {
         
         #BeforeFile=list.files(path = 'xview_auto/xview2/test/',pattern='pre_.*\\.png')
         #outfile2 <- file.path(paste('xview_auto/xview2/test/', BeforeFile,sep = "")) 
-        outfile3 <- file.path("xview_auto/xview2/test/", input$AfterFile$name)
+        #outfile3 <- file.path("xview_auto/xview2/test/", input$AfterFile$name)
+        outfile3 <- file.path("xview_auto/xview2/test/", "After_Image_File.png")
         contentType <- '.png'
         
         list(src = outfile3,

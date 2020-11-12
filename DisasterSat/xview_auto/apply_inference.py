@@ -8,9 +8,6 @@ import cv2
 from pathlib import Path
 # this program is going to automate everything..
 
-# this program is going to automate everything..
-#os.getcwd()
-#os.chdir('/Users/fire/Desktop/GIT_Repos/xview2_uva/xview_auto')
 os.chdir(os.getcwd())
 print(os.getcwd()) #For testing. Can be removed whenever, but won't affect performance
 
@@ -18,22 +15,15 @@ path=os.getcwd()
 print('path is' + path)
 
 #GLOBAL VARIABLES
-# WEIGHT_LOC_PTH = '/Users/fire/Desktop/GIT_Repos/xview2_uva/xview_auto/xview2/weights/localization.h5'
-# MEAN_PTH = '/Users/fire/Desktop/GIT_Repos/xview2_uva/xview_auto/xview2/weights/mean.npy'
-# WEIGHT_DAM_PTH = '/Users/fire/Desktop/GIT_Repos/xview2_uva/xview_auto/xview2/weights/classification.hdf5'
 
 WEIGHT_LOC_PTH = path +'/xview_auto/xview2/weights/localization.h5'
 MEAN_PTH = path +'/xview_auto/xview2/weights/mean.npy'
 WEIGHT_DAM_PTH = path +'/xview_auto/xview2/weights/classification.hdf5'
 
-#I think if we add some paste os. arguments here automation will be rather simple
-# PRE_IMAGE = '/Users/fire/Desktop/GIT_Repos/xview2_uva/xview_auto/xview2/test/mexico-earthquake_00000004_pre_disaster.png'
-# POST_IMAGE = '/Users/fire/Desktop/GIT_Repos/xview2_uva/xview_auto/xview2/test/mexico-earthquake_00000004_post_disaster.png'
+PRE_IMAGE = path +'/xview_auto/xview2/test/Before_Image_File.png' 
+POST_IMAGE = path +'/xview_auto/xview2/test/After_Image_File.png' 
 
-PRE_IMAGE = path +'/xview_auto/xview2/test/mexico-earthquake_00000004_pre_disaster.png'
-POST_IMAGE = path +'/xview_auto/xview2/test/mexico-earthquake_00000004_post_disaster.png'
-
-# POST_WITH_DAMAGE_CLASS_MASK = '/Users/fire/Desktop/GIT_Repos/xview2_uva/xview_auto/xview2/test/mexico-earthquake_00000004_prediction.png'
+# So it will always write to the directory and have it named this which is fine
 POST_WITH_DAMAGE_CLASS_MASK = path +'/xview_auto/xview2/test/mexico-earthquake_00000004_prediction.png'
 
 #input
