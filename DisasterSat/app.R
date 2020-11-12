@@ -15,7 +15,8 @@ library(shinycssloaders)
 #use_condaenv("DisasterSat2", required = TRUE)
 
 # ### Define any Python packages needed for the app here:
-PYTHON_DEPENDENCIES = c("absl-py==0.11.0",
+PYTHON_DEPENDENCIES = c("pip==19.0.3", #Added to fix Warning: Error in : invalid version specification ‘20.3b1’
+                        "absl-py==0.11.0",
                         "astor==0.8.1",
                         "cached-property==1.5.2",
                         "gast==0.4.0",
@@ -137,10 +138,10 @@ server <- shinyServer(function(input,output,session) {
         
         # Create virtual env and install dependencies
         reticulate::virtualenv_create(envname = virtualenv_dir, python = python_path)
+        reticulate::virtualenv_remove(envname = virtualenv_dir, packages = "pip") #Added to fix Warning: Error in : invalid version specification ‘20.3b1’
         reticulate::virtualenv_install(virtualenv_dir, packages = PYTHON_DEPENDENCIES, ignore_installed=TRUE)
         reticulate::use_virtualenv(virtualenv_dir, required = T)
 
-    
 ######################################### Handle Data Inputs ################################################   
     
     ##### Handle storage and use of the Before Satellite png file
