@@ -1,0 +1,12 @@
+name: DisasterSat
+title: DisasterSat
+username:
+account: jordanbales
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3216319
+bundleId: 3851193
+url: https://jordanbales.shinyapps.io/DisasterSat/
+when: 1605174770.15058
+asMultiple: FALSE
+asStatic: FALSE

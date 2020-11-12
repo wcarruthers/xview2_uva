@@ -9,8 +9,47 @@ library(leaflet)
 library(shinydashboard)
 library(dashboardthemes)
 library(shinycssloaders)
-library(reticulate)
-use_condaenv("DisasterSat2", required = TRUE)
+#library(reticulate)
+
+#This has to be uncommented to run locally
+#use_condaenv("DisasterSat2", required = TRUE)
+
+# ### Define any Python packages needed for the app here:
+PYTHON_DEPENDENCIES = c("absl-py==0.11.0",
+                        "astor==0.8.1",
+                        "cached-property==1.5.2",
+                        "gast==0.4.0",
+                        "google-pasta==0.2.0",
+                        "grpcio==1.33.2",
+                        "h5py==2.10.0",
+                        "imantics==0.1.12",
+                        "joblib==0.17.0",
+                        "keras==2.3.0",
+                        "keras-applications==1.0.8",
+                        "keras-preprocessing==1.1.2",
+                        "lxml==4.6.1",
+                        "markdown==3.3.3",
+                        "numpy==1.19.4",
+                        "opencv-python==4.4.0.46",
+                        "pandas==1.1.4",
+                        "pytz==2020.4",
+                        "pyyaml==5.3.1",
+                        "scikit-learn==0.23.2",
+                        "scipy==1.5.4",
+                        "shapely==1.7.1",
+                        "simplification==0.5.7",
+                        "sklearn==0.0",
+                        "tensorboard==1.14.0",
+                        "tensorflow==1.14.0",
+                        "tensorflow-estimator==1.14.0",
+                        "termcolor==1.1.0",
+                        "threadpoolctl==2.1.0",
+                        "tqdm==4.51.0",
+                        "werkzeug==1.0.1",
+                        "wrapt==1.12.1",
+                        "xmljson==0.2.1"
+                        )
+
 
 ############################ User Interface ################################
 ui <- shinyUI(
@@ -90,6 +129,16 @@ ui <- shinyUI(
             )))
 ############################ Server Details ################################
 server <- shinyServer(function(input,output,session) {
+    
+######################################### App virtualenv Setup  ################################################           
+    
+        virtualenv_dir = Sys.getenv('VIRTUALENV_NAME')
+        python_path = Sys.getenv('PYTHON_PATH')
+        
+        # Create virtual env and install dependencies
+        reticulate::virtualenv_create(envname = virtualenv_dir, python = python_path)
+        reticulate::virtualenv_install(virtualenv_dir, packages = PYTHON_DEPENDENCIES, ignore_installed=TRUE)
+        reticulate::use_virtualenv(virtualenv_dir, required = T)
 
     
 ######################################### Handle Data Inputs ################################################   
