@@ -52,21 +52,12 @@ ui <- shinyUI(
         
         dashboardBody(
             shinyDashboardThemes(theme = "purple_gradient"),
-            # titlePanel(h1("Infrastructure Analysis",
-            #               #align = "center",
-            #               style="font-family: 'Lobster',
-            #                      cursive;
-            #                      font-size: 16;
-            #                      font-weights: 500;
-            #                      line-height: 1.1;"),
-            #               windowTitle = "Infrastructure Analysis"),
             
                 mainPanel(
                     fluidPage(
                     fluidRow(
-                        column(7, h2("Infrastructure Analysis",
-                                     align = "center",
-                                     style="font-family: 'Lobster',
+                        column(7, 
+                        h2("Infrastructure Analysis",align = "center",style="font-family: 'Lobster',
                                  cursive;
                                  font-size: 16;
                                  font-weights: 500;
@@ -74,9 +65,8 @@ ui <- shinyUI(
                         withSpinner(imageOutput('outputImage'))
                         
                         ), 
-                        column(3, offset = 2, h2("Before",
-                                                 align = "center",
-                                                 style="font-family: 'Lobster',
+                        column(3, offset = 2,
+                               h2("Before Damage",align = "center",style="font-family: 'Lobster',
                                  cursive;
                                  font-size: 16;
                                  font-weights: 500;
@@ -84,9 +74,8 @@ ui <- shinyUI(
                         imageOutput('outputBeforeImage')
                         )),
                     fluidRow(
-                        column(3,offset = 9, h2("After",
-                                                align = "center",
-                                                style="font-family: 'Lobster',
+                        column(3, offset = 9,
+                               h2("After Damage", align = "center",style="font-family: 'Lobster',
                                  cursive;
                                  font-size: 16;
                                  font-weights: 500;
@@ -151,8 +140,8 @@ server <- shinyServer(function(input,output,session) {
         
         list(src = outfile,
              contentType=contentType,
-             width = 750,
-             height=750)
+             width = 580,
+             height= 580)
         {
         #No clue why this doesn't work but should make it dynamic
         #width = session$clientData$output_outputImage_width,
@@ -162,12 +151,8 @@ server <- shinyServer(function(input,output,session) {
     } else {
         list(src = 'xview_auto/xview2/test/PreLoad_prediction.png',
              contentType='.png',
-             #width = 750,
-             height=function() {
-                 if (session$clientData$output_outputImage_width <= 1000) {
-                     (log(session$clientData$output_outputImage_width)*(1/4))
-                 } else { log((session$clientData$output_outputImage_width)*(3/16) )}
-             })
+             width = 580,
+             height=580)
     }
     
 }, deleteFile = FALSE) 
@@ -191,12 +176,8 @@ server <- shinyServer(function(input,output,session) {
         } else {
             list(src = 'xview_auto/xview2/test/PreLoad_Before_Image.png',
                  contentType='.png',
-                 #width = 350,
-                 height=function() {
-                     if (session$clientData$output_outputBeforeImage_width <= 1000){
-                         (log( session$clientData$output_outputBeforeImage_width)*(1/4))
-                     } else {log( (session$clientData$output_outputBeforeImage_width)*(3/16) )}
-                 }) 
+                 width = 350,
+                 height=350) 
         }
     }, deleteFile = FALSE)
     
@@ -219,12 +200,8 @@ server <- shinyServer(function(input,output,session) {
         } else {
             list(src = 'xview_auto/xview2/test/PreLoad_After_Image.png',
                  contentType='.png',
-                 #width = 350,
-                 height=function() {
-                     if (session$clientData$output_outputAfterImage_width <= 100) {
-                         (log(session$clientData$output_outputAfterImage_width)*(1/4))
-                     } else { log((session$clientData$output_outputAfterImagee_width)*(3/16)) }
-                 }) 
+                 width = 350,
+                 height= 350) 
         }
     }, deleteFile = FALSE)
     
