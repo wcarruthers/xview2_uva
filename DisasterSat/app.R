@@ -52,26 +52,51 @@ ui <- shinyUI(
         
         dashboardBody(
             shinyDashboardThemes(theme = "purple_gradient"),
-            titlePanel(h1("Infrastructure Analysis",
-                          #align = "center",
-                          style="font-family: 'Lobster',
+            # titlePanel(h1("Infrastructure Analysis",
+            #               #align = "center",
+            #               style="font-family: 'Lobster',
+            #                      cursive;
+            #                      font-size: 16;
+            #                      font-weights: 500;
+            #                      line-height: 1.1;"),
+            #               windowTitle = "Infrastructure Analysis"),
+            
+                mainPanel(
+                    fluidPage(
+                    fluidRow(
+                        column(7, h2("Infrastructure Analysis",
+                                     align = "center",
+                                     style="font-family: 'Lobster',
                                  cursive;
                                  font-size: 16;
                                  font-weights: 500;
                                  line-height: 1.1;"),
-                          windowTitle = "Infrastructure Analysis"),
-            
-                mainPanel(
-                    fluidRow(
-                        column(width = 12,height=100,align="center",offset = 12), 
-                               #div(imageOutput("outputImage", height = "100%"), align = "center")),
-                               #height=100,align="center",offset = 5), 
-                        div(withSpinner(imageOutput('outputImage')),align="left"),
-                        DT::dataTableOutput("TableResults", width = "100%", height = "100%"),
-                        div(imageOutput('outputBeforeImage'),align="right"),
-                        div(imageOutput('outputAfterImage'),align="right")
+                        withSpinner(imageOutput('outputImage'))
                         
-                        ))
+                        ), 
+                        column(3, offset = 2, h2("Before",
+                                                 align = "center",
+                                                 style="font-family: 'Lobster',
+                                 cursive;
+                                 font-size: 16;
+                                 font-weights: 500;
+                                 line-height: 1.1;"),
+                        imageOutput('outputBeforeImage')
+                        )),
+                    fluidRow(
+                        column(3,offset = 9, h2("After",
+                                                align = "center",
+                                                style="font-family: 'Lobster',
+                                 cursive;
+                                 font-size: 16;
+                                 font-weights: 500;
+                                 line-height: 1.1;"),
+                        imageOutput('outputAfterImage'))
+                    )
+                        
+                        #DT::dataTableOutput("TableResults", width = "100%", height = "100%")
+                        
+                        ) )
                 
             )))
 ############################ Server Details ################################
@@ -126,14 +151,23 @@ server <- shinyServer(function(input,output,session) {
         
         list(src = outfile,
              contentType=contentType,
-             width = 800,
-             height=800)
+             width = 750,
+             height=750)
+        {
+        #No clue why this doesn't work but should make it dynamic
+        #width = session$clientData$output_outputImage_width,
+        #height=session$clientData$output_outputImage_height)
+        }
     #}, deleteFile = FALSE) 
     } else {
         list(src = 'xview_auto/xview2/test/PreLoad_prediction.png',
              contentType='.png',
-             width = 800,
-             height=800)
+             #width = 750,
+             height=function() {
+                 if (session$clientData$output_outputImage_width <= 1000) {
+                     (log(session$clientData$output_outputImage_width)*(1/4))
+                 } else { log((session$clientData$output_outputImage_width)*(3/16) )}
+             })
     }
     
 }, deleteFile = FALSE) 
@@ -151,14 +185,18 @@ server <- shinyServer(function(input,output,session) {
         
         list(src = outfile2,
              contentType=contentType,
-             width = 200,
-             height=200)
+             width = 350,
+             height=350)
     #}, deleteFile = FALSE)
         } else {
             list(src = 'xview_auto/xview2/test/PreLoad_Before_Image.png',
                  contentType='.png',
-                 width = 200,
-                 height=200) 
+                 #width = 350,
+                 height=function() {
+                     if (session$clientData$output_outputBeforeImage_width <= 1000){
+                         (log( session$clientData$output_outputBeforeImage_width)*(1/4))
+                     } else {log( (session$clientData$output_outputBeforeImage_width)*(3/16) )}
+                 }) 
         }
     }, deleteFile = FALSE)
     
@@ -175,14 +213,18 @@ server <- shinyServer(function(input,output,session) {
         
         list(src = outfile3,
              contentType=contentType,
-             width = 200,
-             height=200)
+             width = 350,
+             height=350)
     #}, deleteFile = FALSE)
         } else {
             list(src = 'xview_auto/xview2/test/PreLoad_After_Image.png',
                  contentType='.png',
-                 width = 200,
-                 height=200) 
+                 #width = 350,
+                 height=function() {
+                     if (session$clientData$output_outputAfterImage_width <= 100) {
+                         (log(session$clientData$output_outputAfterImage_width)*(1/4))
+                     } else { log((session$clientData$output_outputAfterImagee_width)*(3/16)) }
+                 }) 
         }
     }, deleteFile = FALSE)
     
