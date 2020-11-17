@@ -9,13 +9,13 @@ library(leaflet)
 library(shinydashboard)
 library(dashboardthemes)
 library(shinycssloaders)
-#library(reticulate)
+library(reticulate)
 
 #This has to be uncommented to run locally
-#use_condaenv("DisasterSat2", required = TRUE)
+use_condaenv("DisasterSat2", required = TRUE)
 
 # ### Define any Python packages needed for the app here:
-PYTHON_DEPENDENCIES = c("pip", #Added to fix Warning: Error in : invalid version specification ‘20.3b1’
+PYTHON_DEPENDENCIES = c(#Added to fix Warning: Error in : invalid version specification ‘20.3b1’
                         "absl-py==0.11.0",
                         "astor==0.8.1",
                         "cached-property==1.5.2",
@@ -30,7 +30,7 @@ PYTHON_DEPENDENCIES = c("pip", #Added to fix Warning: Error in : invalid version
                         "keras-preprocessing==1.1.2",
                         "lxml==4.6.1",
                         "markdown==3.3.3",
-                        #"numpy==1.19.4",
+                        "numpy==1.19.4",
                         "opencv-python==4.4.0.46",
                         "pandas==1.1.4",
                         "pytz==2020.4",
@@ -133,15 +133,16 @@ server <- shinyServer(function(input,output,session) {
     
 ######################################### App virtualenv Setup  ################################################           
     
-        virtualenv_dir = Sys.getenv('VIRTUALENV_NAME')
-        python_path = Sys.getenv('PYTHON_PATH')
-        
-        # Create virtual env and install dependencies
-        reticulate::virtualenv_create(envname = virtualenv_dir, python = python_path)
-        reticulate::virtualenv_remove(envname = virtualenv_dir, packages = "pip") #Added to fix Warning: Error in : invalid version specification ‘20.3b1’
-        reticulate::virtualenv_install(virtualenv_dir, packages = PYTHON_DEPENDENCIES, ignore_installed=TRUE)
-        reticulate::use_virtualenv(virtualenv_dir, required = T)
-        
+        # virtualenv_dir = Sys.getenv('VIRTUALENV_NAME')
+        # python_path = Sys.getenv('PYTHON_PATH')
+        # 
+        # # Create virtual env and install dependencies
+        # reticulate::virtualenv_create(envname = virtualenv_dir, python = python_path)
+        # reticulate::virtualenv_remove(envname = virtualenv_dir, packages = "pip") #Added to fix Warning: Error in : invalid version specification ‘20.3b1’
+        # reticulate::virtualenv_install(virtualenv_dir, packages = "pip==20.2.4", ignore_installed=TRUE)#Added to fix Warning: Error in : invalid version specification ‘20.3b1’
+        # reticulate::virtualenv_install(virtualenv_dir, packages = PYTHON_DEPENDENCIES, ignore_installed=TRUE)
+        # reticulate::use_virtualenv(virtualenv_dir, required = T)
+        # 
 ######################################### Handle Data Inputs ################################################   
     
     ##### Handle storage and use of the Before Satellite png file
